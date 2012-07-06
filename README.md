@@ -9,4 +9,4 @@ A user can remove a tag by selecting its range of text and then either clicking 
 
 After a user has reviewed the tagging for accuracy, the program will export a list of unique tagged IOCs. It currently either exports to the console or saves a CSV file. It is also set up so anyone could easily add another output format for a specific application. 
 
-The program is written in Python 3.2, and a binary version for Windows is provided. A simple example case report (TestReportCase001.txt) is also provided for testing and demonstration. 
+The program is written in Python 3.2, and a binary version for Windows is provided (IOCextractor.zip). A simple example case report (TestReportCase001.txt) is also provided for testing and demonstration. 
