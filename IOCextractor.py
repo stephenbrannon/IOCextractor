@@ -9,6 +9,7 @@ import re
 import sys
 
 tags = ['md5', 'ipv4', 'url', 'domain', 'email']
+reIPv4 = r"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b"
 
 def tag_initial():
     lines = text.get(1.0, 'end').split('\n')
@@ -25,9 +26,10 @@ def tag_initial():
     text.tag_configure('ipv4', background='#6CB23E')
     linenumber = 1
     for line in lines:
-        for m in re.finditer(r"(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.|\[\.\])){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]){1,3}", line, re.IGNORECASE):
+        for m in re.finditer(reIPv4, line, re.IGNORECASE):
             result = text.get(str(linenumber) + '.' + str(m.start()), str(linenumber) + '.' + str(m.end()))
-            if result.find('10.') != 0: #reject matches that begin with 10.
+            # if result.find('10.') != 0: #reject matches that begin with 10.
+            if not (result.find('10.') == 0 or result.find('192.168.') == 0 or result.find('172.16.') == 0):
                 text.tag_add('ipv4',str(linenumber) + '.' + str(m.start()), str(linenumber) + '.' + str(m.end()))
         linenumber += 1
 
