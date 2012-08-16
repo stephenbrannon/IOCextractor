@@ -25,7 +25,7 @@ def tag_initial():
     text.tag_configure('ipv4', background='#6CB23E')
     linenumber = 1
     for line in lines:
-        for m in re.finditer(r"(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.|\[\.\])){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]){1,3}", line, re.IGNORECASE):
+        for m in re.finditer(r"\b(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.|\[\.\])){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]){1,3}\b", line, re.IGNORECASE):
             result = text.get(str(linenumber) + '.' + str(m.start()), str(linenumber) + '.' + str(m.end()))
             if result.find('10.') != 0: #reject matches that begin with 10.
                 text.tag_add('ipv4',str(linenumber) + '.' + str(m.start()), str(linenumber) + '.' + str(m.end()))
