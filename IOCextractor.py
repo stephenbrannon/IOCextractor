@@ -11,7 +11,7 @@ import sys
 tags = ['md5', 'ipv4', 'url', 'domain', 'email']
 
 reMD5 = r"([A-F]|[0-9]){32}"
-reIPv4 = r"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\[\.\])){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b"
+reIPv4 = r"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\[\.\])){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
 reURL = r"[A-Z0-9\-\.]+\.(XN--CLCHC0EA0B2G2A9GCD|XN--HGBK6AJ7F53BBA|XN--HLCJ6AYA9ESC7A|XN--11B5BS3A9AJ6G|XN--MGBERP4A5D4AR|XN--XKC2DL3A5EE0H|XN--80AKHBYKNJ4F|XN--XKC2AL3HYE2A|XN--LGBBAT1AD8J|XN--MGBC0A9AZCG|XN--9T4B11YI5A|XN--MGBAAM7A8H|XN--MGBAYH7GPA|XN--MGBBH1A71E|XN--FPCRJ9C3D|XN--FZC2C9E2C|XN--YFRO4I67O|XN--YGBI2AMMX|XN--3E0B707E|XN--JXALPDLP|XN--KGBECHTV|XN--OGBPF8FL|XN--0ZWM56D|XN--45BRJ9C|XN--80AO21A|XN--DEBA0AD|XN--G6W251D|XN--GECRJ9C|XN--H2BRJ9C|XN--J6W193G|XN--KPRW13D|XN--KPRY57D|XN--PGBS0DH|XN--S9BRJ9C|XN--90A3AC|XN--FIQS8S|XN--FIQZ9S|XN--O3CW4H|XN--WGBH1C|XN--WGBL6A|XN--ZCKZAH|XN--P1AI|MUSEUM|TRAVEL|AERO|ARPA|ASIA|COOP|INFO|JOBS|MOBI|NAME|BIZ|CAT|COM|EDU|GOV|INT|MIL|NET|ORG|PRO|TEL|XXX|AC|AD|AE|AF|AG|AI|AL|AM|AN|AO|AQ|AR|AS|AT|AU|AW|AX|AZ|BA|BB|BD|BE|BF|BG|BH|BI|BJ|BM|BN|BO|BR|BS|BT|BV|BW|BY|BZ|CA|CC|CD|CF|CG|CH|CI|CK|CL|CM|CN|CO|CR|CU|CV|CW|CX|CY|CZ|DE|DJ|DK|DM|DO|DZ|EC|EE|EG|ER|ES|ET|EU|FI|FJ|FK|FM|FO|FR|GA|GB|GD|GE|GF|GG|GH|GI|GL|GM|GN|GP|GQ|GR|GS|GT|GU|GW|GY|HK|HM|HN|HR|HT|HU|ID|IE|IL|IM|IN|IO|IQ|IR|IS|IT|JE|JM|JO|JP|KE|KG|KH|KI|KM|KN|KP|KR|KW|KY|KZ|LA|LB|LC|LI|LK|LR|LS|LT|LU|LV|LY|MA|MC|MD|ME|MG|MH|MK|ML|MM|MN|MO|MP|MQ|MR|MS|MT|MU|MV|MW|MX|MY|MZ|NA|NC|NE|NF|NG|NI|NL|NO|NP|NR|NU|NZ|OM|PA|PE|PF|PG|PH|PK|PL|PM|PN|PR|PS|PT|PW|PY|QA|RE|RO|RS|RU|RW|SA|SB|SC|SD|SE|SG|SH|SI|SJ|SK|SL|SM|SN|SO|SR|ST|SU|SV|SX|SY|SZ|TC|TD|TF|TG|TH|TJ|TK|TL|TM|TN|TO|TP|TR|TT|TV|TW|TZ|UA|UG|UK|US|UY|UZ|VA|VC|VE|VG|VI|VN|VU|WF|WS|YE|YT|ZA|ZM|ZW)(/\S+)"
 reDomain = r"[A-Z0-9\-\.]+\.(XN--CLCHC0EA0B2G2A9GCD|XN--HGBK6AJ7F53BBA|XN--HLCJ6AYA9ESC7A|XN--11B5BS3A9AJ6G|XN--MGBERP4A5D4AR|XN--XKC2DL3A5EE0H|XN--80AKHBYKNJ4F|XN--XKC2AL3HYE2A|XN--LGBBAT1AD8J|XN--MGBC0A9AZCG|XN--9T4B11YI5A|XN--MGBAAM7A8H|XN--MGBAYH7GPA|XN--MGBBH1A71E|XN--FPCRJ9C3D|XN--FZC2C9E2C|XN--YFRO4I67O|XN--YGBI2AMMX|XN--3E0B707E|XN--JXALPDLP|XN--KGBECHTV|XN--OGBPF8FL|XN--0ZWM56D|XN--45BRJ9C|XN--80AO21A|XN--DEBA0AD|XN--G6W251D|XN--GECRJ9C|XN--H2BRJ9C|XN--J6W193G|XN--KPRW13D|XN--KPRY57D|XN--PGBS0DH|XN--S9BRJ9C|XN--90A3AC|XN--FIQS8S|XN--FIQZ9S|XN--O3CW4H|XN--WGBH1C|XN--WGBL6A|XN--ZCKZAH|XN--P1AI|MUSEUM|TRAVEL|AERO|ARPA|ASIA|COOP|INFO|JOBS|MOBI|NAME|BIZ|CAT|COM|EDU|GOV|INT|MIL|NET|ORG|PRO|TEL|XXX|AC|AD|AE|AF|AG|AI|AL|AM|AN|AO|AQ|AR|AS|AT|AU|AW|AX|AZ|BA|BB|BD|BE|BF|BG|BH|BI|BJ|BM|BN|BO|BR|BS|BT|BV|BW|BY|BZ|CA|CC|CD|CF|CG|CH|CI|CK|CL|CM|CN|CO|CR|CU|CV|CW|CX|CY|CZ|DE|DJ|DK|DM|DO|DZ|EC|EE|EG|ER|ES|ET|EU|FI|FJ|FK|FM|FO|FR|GA|GB|GD|GE|GF|GG|GH|GI|GL|GM|GN|GP|GQ|GR|GS|GT|GU|GW|GY|HK|HM|HN|HR|HT|HU|ID|IE|IL|IM|IN|IO|IQ|IR|IS|IT|JE|JM|JO|JP|KE|KG|KH|KI|KM|KN|KP|KR|KW|KY|KZ|LA|LB|LC|LI|LK|LR|LS|LT|LU|LV|LY|MA|MC|MD|ME|MG|MH|MK|ML|MM|MN|MO|MP|MQ|MR|MS|MT|MU|MV|MW|MX|MY|MZ|NA|NC|NE|NF|NG|NI|NL|NO|NP|NR|NU|NZ|OM|PA|PE|PF|PG|PH|PK|PL|PM|PN|PR|PS|PT|PW|PY|QA|RE|RO|RS|RU|RW|SA|SB|SC|SD|SE|SG|SH|SI|SJ|SK|SL|SM|SN|SO|SR|ST|SU|SV|SX|SY|SZ|TC|TD|TF|TG|TH|TJ|TK|TL|TM|TN|TO|TP|TR|TT|TV|TW|TZ|UA|UG|UK|US|UY|UZ|VA|VC|VE|VG|VI|VN|VU|WF|WS|YE|YT|ZA|ZM|ZW)\b"
 reEmail = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(XN--CLCHC0EA0B2G2A9GCD|XN--HGBK6AJ7F53BBA|XN--HLCJ6AYA9ESC7A|XN--11B5BS3A9AJ6G|XN--MGBERP4A5D4AR|XN--XKC2DL3A5EE0H|XN--80AKHBYKNJ4F|XN--XKC2AL3HYE2A|XN--LGBBAT1AD8J|XN--MGBC0A9AZCG|XN--9T4B11YI5A|XN--MGBAAM7A8H|XN--MGBAYH7GPA|XN--MGBBH1A71E|XN--FPCRJ9C3D|XN--FZC2C9E2C|XN--YFRO4I67O|XN--YGBI2AMMX|XN--3E0B707E|XN--JXALPDLP|XN--KGBECHTV|XN--OGBPF8FL|XN--0ZWM56D|XN--45BRJ9C|XN--80AO21A|XN--DEBA0AD|XN--G6W251D|XN--GECRJ9C|XN--H2BRJ9C|XN--J6W193G|XN--KPRW13D|XN--KPRY57D|XN--PGBS0DH|XN--S9BRJ9C|XN--90A3AC|XN--FIQS8S|XN--FIQZ9S|XN--O3CW4H|XN--WGBH1C|XN--WGBL6A|XN--ZCKZAH|XN--P1AI|MUSEUM|TRAVEL|AERO|ARPA|ASIA|COOP|INFO|JOBS|MOBI|NAME|BIZ|CAT|COM|EDU|GOV|INT|MIL|NET|ORG|PRO|TEL|XXX|AC|AD|AE|AF|AG|AI|AL|AM|AN|AO|AQ|AR|AS|AT|AU|AW|AX|AZ|BA|BB|BD|BE|BF|BG|BH|BI|BJ|BM|BN|BO|BR|BS|BT|BV|BW|BY|BZ|CA|CC|CD|CF|CG|CH|CI|CK|CL|CM|CN|CO|CR|CU|CV|CW|CX|CY|CZ|DE|DJ|DK|DM|DO|DZ|EC|EE|EG|ER|ES|ET|EU|FI|FJ|FK|FM|FO|FR|GA|GB|GD|GE|GF|GG|GH|GI|GL|GM|GN|GP|GQ|GR|GS|GT|GU|GW|GY|HK|HM|HN|HR|HT|HU|ID|IE|IL|IM|IN|IO|IQ|IR|IS|IT|JE|JM|JO|JP|KE|KG|KH|KI|KM|KN|KP|KR|KW|KY|KZ|LA|LB|LC|LI|LK|LR|LS|LT|LU|LV|LY|MA|MC|MD|ME|MG|MH|MK|ML|MM|MN|MO|MP|MQ|MR|MS|MT|MU|MV|MW|MX|MY|MZ|NA|NC|NE|NF|NG|NI|NL|NO|NP|NR|NU|NZ|OM|PA|PE|PF|PG|PH|PK|PL|PM|PN|PR|PS|PT|PW|PY|QA|RE|RO|RS|RU|RW|SA|SB|SC|SD|SE|SG|SH|SI|SJ|SK|SL|SM|SN|SO|SR|ST|SU|SV|SX|SY|SZ|TC|TD|TF|TG|TH|TJ|TK|TL|TM|TN|TO|TP|TR|TT|TV|TW|TZ|UA|UG|UK|US|UY|UZ|VA|VC|VE|VG|VI|VN|VU|WF|WS|YE|YT|ZA|ZM|ZW)\b"
@@ -93,7 +93,7 @@ def askopen(filename = ''):
         with open(filename, 'rb') as f: #read as binary
             doc = f.read()
             doc = doc.decode('utf_8', 'ignore') #drop any non-ascii bytes
-
+            
             #if a carriage return is orphaned, replace it with a new line
             doc = list(doc)
             i = 0
@@ -102,22 +102,31 @@ def askopen(filename = ''):
                     if ord(doc[i + 1]) != 10: #it's not followed by a new line
                         doc[i] = chr(10) #replace it with a new line
                 i += 1
-            if ord(doc[len(doc)-1]) == 13:
+            if ord(doc[len(doc)-1]) == 13: #end
                 doc[len(doc)-1] = chr(10)
-
+            
+            #drop carriage returns
+            i = 0
+            while (i < len(doc) - 1):
+                if ord(doc[i]) == 13: #it's a carriage return
+                    doc.pop(i)
+                else:
+                    i += 1
+                    
             doc = ''.join(doc)
 
             text.delete('1.0',END)
             text.insert('1.0', doc)
             tag_initial()
-            root.title(filename + ' - IOCextract')
+            root.title(filename + ' - IOCextractor')
 
 def clear_tag(holder = 0):
     if len(text.tag_ranges("sel")) != 0: #selection is not empty
         #untag all occurrences of selected string
-        key = text.get(text.tag_ranges("sel")[0], text.tag_ranges("sel")[1])
+        key = text.get(text.tag_ranges("sel")[0], text.tag_ranges("sel")[1])        
         lines = text.get(1.0, 'end').split('\n')
         linenumber = 1
+
         for line in lines:
             for m in re.finditer(re.escape(key), line, re.IGNORECASE):
                 for t in tags:
@@ -126,9 +135,17 @@ def clear_tag(holder = 0):
 
         for t in tags: #necessary backup in case the regex fails to match
             text.tag_remove(t, text.tag_ranges("sel")[0], text.tag_ranges("sel")[1])
-
+        
 def tag_new(tag):
     if len(text.tag_ranges("sel")) != 0: #selection is not empty
+        #remove any newline characters from the selection
+        if '\n' in text.get(text.tag_ranges("sel")[0], text.tag_ranges("sel")[1]):
+            line_start = (str(text.tag_ranges("sel")[0]).split('.'))[1]
+            newline_index = text.get(text.tag_ranges("sel")[0], text.tag_ranges("sel")[1]).index('\n')
+            del_line = str(text.tag_ranges("sel")[0]).split('.')[0]
+            del_position = str(int(line_start) + int(newline_index))
+            text.delete(del_line + '.' + del_position)
+
         #tag all occurences of selected string
         key = text.get(text.tag_ranges("sel")[0], text.tag_ranges("sel")[1])
         lines = text.get(1.0, 'end').split('\n')
@@ -151,8 +168,12 @@ def export_console():
                 mystart = h
             else:
                 mystop = h
-                if not text.get(mystart,mystop).replace('[','').replace(']','') in indicators:
-                    indicators.append(text.get(mystart,mystop).replace('[','').replace(']',''))
+                if t == 'md5': #make all hashes uppercase
+                    if not text.get(mystart,mystop).replace('[','').replace(']','').upper() in indicators:
+                        indicators.append(text.get(mystart,mystop).replace('[','').replace(']','').upper())
+                else:
+                    if not text.get(mystart,mystop).replace('[','').replace(']','') in indicators:
+                        indicators.append(text.get(mystart,mystop).replace('[','').replace(']',''))
                 mystart = 0
         for i in indicators:
             print(i)
@@ -172,8 +193,12 @@ def export_csv():
                     mystart = h
                 else:
                     mystop = h
-                    if not text.get(mystart,mystop).replace('[','').replace(']','') in indicators:
-                        indicators.append(text.get(mystart,mystop).replace('[','').replace(']',''))
+                    if t == 'md5': #make all hashes uppercase
+                        if not text.get(mystart,mystop).replace('[','').replace(']','').upper() in indicators:
+                            indicators.append(text.get(mystart,mystop).replace('[','').replace(']','').upper())
+                    else:
+                        if not text.get(mystart,mystop).replace('[','').replace(']','') in indicators:
+                            indicators.append(text.get(mystart,mystop).replace('[','').replace(']',''))
                     mystart = 0
             for i in indicators:
                 if i.find(',') == -1: #no commas, print normally
@@ -186,7 +211,7 @@ def export_csv():
              f.write(output)
 
 root = Tk()
-root.title('IOCextract')
+root.title('IOCextractor')
 
 topframe = Frame(root)
 topframe.pack()
@@ -228,7 +253,8 @@ scrollbar.pack({"side": "left", "fill" : "y"})
 scrollbar.config(command = text.yview)
 text.config(yscrollcommand = scrollbar.set)
 
-text.bind('<Button-3>', clear_tag) #right-click selection to untag
+text.bind('<Button-3>', clear_tag) #right-click selection to untag (Windows, Linux)
+text.bind('<Command-Button-1>', clear_tag) #command-click selection to untag (Mac)
 
 #insert doc if received as commandline argument
 if len(sys.argv) == 2:

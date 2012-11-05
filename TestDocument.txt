@@ -1,0 +1,50 @@
+This is a test document for verifying that IOC matching still works correctly.
+
+REJECT
+private, link-local, and loopback IPs:
+10.0.0.0 - 10.255.255.255
+172.16.0.0 - 172.31.255.255
+192.168.0.0 - 192.168.255.255
+169.254.1.0 - 169.254.254.255
+127.0.0.0 - 127.255.255.255
+10.0.0.1
+192.168.1.1
+172.16.0.0
+172.20.1.1
+172.31.255.255
+169.254.1.0
+169.254.14.15
+169.254.254.255
+127.0.0.1
+127.4.5.6
+
+Verizon emails:
+bob@verizon.com
+bob@verizonbusiness.com
+bob@one.verizon.com
+8b3a213gfc74e56b297439f9ffef8c40 
+
+TAG
+12.12.12.12
+123.123.123.123
+123[.]123[.]123[.]123
+123.123.123.1234 An IP followed by a footnote often appears this way when saved as text.
+bob@aol.com
+8b3a213efc74e56b297439f9ffef8c40 
+8B3A213EFC74E56B297439F9FFEF8C40 catch, but duplicate to verify only output once 
+f4db7003155a381d1b4e1568fc852bc4
+www.google.com
+google.com
+http://wwww.google.com
+https://www.google.com/#hl=en&output=search&sclient=psy-ab&q=fish&oq=fish&gs_l=hp.3..0l4.104829.105063.0.105433.4.3.0.0.0.0.225.614.0j1j2.3.0.les%3Bernk_fspiked_nsqb..0.0...1c.gy18DII6jwU&pbx=1&bav=on.2,or.r_gc.r_pw.r_cp.r_qf.&fp=587342849f060425&biw=1600&bih=776
+
+TESTING
+
+This section (has) characters* that** can complicate regular expression tagging/untagging.
+
+This has an MD5 split across two lines: f4db7003155a381d
+1b4e1568fc852bc4
+
+And here it is again, to test duplication: f4db7003155a381d1b4e1568fc852bc4. 
+
+Test document. 
