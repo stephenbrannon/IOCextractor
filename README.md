@@ -1,7 +1,7 @@
 IOCextractor
 ============
 
-Compatible and tested Python verions: 3.2, 3.3
+Compatible and tested Python versions: 3.2, 3.3; 
 Compatible and tested operating systems: Windows 7, Mac OS 10.8.2, Ubuntu 12.10
 
 IOC (Indicator of Compromise) Extractor: a program to help extract IOCs from text files. The general goal is to speed up the process of parsing structured data (IOCs) from unstructured or semi-structured data (like case reports, security bulletins). 
