@@ -1,12 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
 #This script helps extract indicators of compromise (IOCs) from a text file.
 #A user can add or remove tagged indicators then export the remaining tags.
 #Usage: "python IOCextractor.py" or "python IOCextractor.py document.txt"
 #2012 Stephen Brannon, Verizon RISK Team
 
-from tkinter import *
-from tkinter.filedialog import askopenfilename, asksaveasfilename
+from Tkinter import *
+from tkFileDialog import askopenfilename, asksaveasfilename
 import re
 import sys
+import cybox.api as cybox_api
 
 tags = ['md5', 'ipv4', 'url', 'domain', 'email']
 
@@ -210,6 +214,77 @@ def export_csv():
         with open(filename, 'w') as f:
              f.write(output)
 
+
+def export_cybox():
+    filename = asksaveasfilename(title="Save As", filetypes=[("xml file",".xml"),("All files",".*")])
+    observables_doc = None
+     
+    if filename:
+        observables = []
+        for t in tags:
+            indicators = []
+            myhighlights = text.tag_ranges(t)
+            mystart = 0
+            for h in myhighlights:
+                if mystart == 0:
+                    mystart = h
+                else:
+                    mystop = h
+                    value = text.get(mystart,mystop).replace('[','').replace(']','')
+                    
+                    if t == 'md5':
+                        value = value.upper()
+                        if value not in indicators:
+                            observable = cybox_api.create_file_hash_observable('', value, 'MD5')
+                            observables.append(observable)
+                            indicators.append(value)
+                        
+                    elif t == 'ipv4':
+                        if not value in indicators:
+                            observable = cybox_api.create_ipv4_observable(value)
+                            observables.append(observable)
+                            indicators.append(value)
+
+                    elif t == 'domain':
+                        if not value in indicators:
+                            observable = cybox_api.create_domain_name_observable(value)
+                            observables.append(observable)
+                            indicators.append(value)
+                    
+                    elif t == 'url':
+                        if not value in indicators:
+                            observable = cybox_api.create_url_observable(value)
+                            observables.append(observable)
+                            indicators.append(value)
+
+                    elif t == 'email':
+                        if not value in indicators:
+                            observable = cybox_api.create_email_address_observable(value)
+                            observables.append(observable)
+                            indicators.append(value)
+
+
+                    mystart = 0
+                # end if
+            # end for
+        # end for
+       
+        if len(observables) > 0:
+            observables_doc = cybox_api.create_observables_document(observables)
+ 
+            if len(filename) - filename.find('.xml') != 4:
+                filename = "%s.xml" % filename #add .xml extension if missing
+            # end if
+            
+            f = open(filename, "wb")
+            observables_doc.export(f, 0)
+            f.close()
+        # end if
+            
+             
+        
+
+
 root = Tk()
 root.title('IOCextractor')
 
@@ -244,6 +319,10 @@ export_console.pack({"side": "left"})
 
 export_csv = Button(topframe, text = "Export CSV", command = export_csv)
 export_csv.pack({"side": "left"})
+
+export_cybox= Button(topframe, text = "Export CybOX", command = export_cybox)
+export_cybox.pack({"side": "left"})
+
 
 #build main text area
 text = Text(bottomframe, width=120, height=50)
