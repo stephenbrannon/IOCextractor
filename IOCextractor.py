@@ -59,7 +59,7 @@ def tag_initial():
             result = text.get(str(linenumber) + '.' + str(m.start()), str(linenumber) + '.' + str(m.end()))
             end = m.end()
             #drop trailing punctuation
-            while ('.,”"\'’').find(result[len(result)-1:len(result)]) != -1:
+            while (u'.,\u201d"\'\u2019').find(result[len(result)-1:len(result)]) != -1:
                 result = result[:len(result)-1]
                 end -= 1
             text.tag_add('url',str(linenumber) + '.' + str(m.start()), str(linenumber) + '.' + str(end))
