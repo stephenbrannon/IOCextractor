@@ -5,9 +5,9 @@ IOC (Indicator of Compromise) Extractor: a program to help extract IOCs from tex
 
 Compatibility and Requirements
 ------------------------------
-*Compatible and tested Python versions: 2.7
-*Compatible and tested operating systems: Windows 7, Mac OS 10.8.2, Ubuntu 12.10
-*IOCextractor requires TkInter (http://wiki.python.org/moin/TkInter). 
+* Compatible and tested Python versions: 2.7
+* Compatible and tested operating systems: Windows 7, Mac OS 10.8.2, Ubuntu 12.10
+* IOCextractor requires TkInter (http://wiki.python.org/moin/TkInter). 
 
 This program helps extract indicators of compromise from a plain text file. It currently identifies MD5 hashes, IPv4 addresses, domains, URLs, and email addresses. First, when a user opens a file, the program identifies potential IOCs using regular expressions (ignoring a few obvious false positives, like IP addresses that start with 10). It tags and highlights the potential IOCs for a user to review. 
 
@@ -19,4 +19,4 @@ The program is written in Python 2.7, and a binary version for Windows is provid
 
 Credits
 ------
-*[bworrell] (https://github.com/bworrell) - For adding the ability to export a CybOX Observables XML document. 
+* [bworrell] (https://github.com/bworrell) - For adding the ability to export a CybOX Observables XML document. 
