@@ -1,0 +1,2 @@
+class DefinedObject(object):
+    pass
