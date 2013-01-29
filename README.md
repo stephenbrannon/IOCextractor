@@ -8,6 +8,7 @@ Compatibility and Requirements
 * Compatible and tested Python versions: 2.7
 * Compatible and tested operating systems: Windows 7, Mac OS 10.8.2, Ubuntu 12.10
 * IOCextractor requires TkInter (http://wiki.python.org/moin/TkInter). 
+
 The program is written in Python 2.7, and a binary version for Windows is provided (IOCextractor.zip). 
 
 Usage
