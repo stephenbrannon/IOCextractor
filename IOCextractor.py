@@ -13,7 +13,12 @@ from Tkinter import *
 from tkFileDialog import askopenfilename, asksaveasfilename, askdirectory
 
 import cybox.api as cybox_api
-from ioc_writer import ioc_api, ioc_common
+try:
+    from ioc_writer import ioc_api, ioc_common
+    ioc_writer_available = True
+except ImportError, e:
+    print 'ERROR: Could not load ioc_writer.  Will not be able to export IOCs in OpenIOC 1.1 format.'
+    ioc_writer_available = False
 
 tags = ['md5', 'ipv4', 'url', 'domain', 'email']
 
@@ -400,8 +405,9 @@ export_csv.pack({"side": "left"})
 export_cybox = Button(topframe, text = "Export CybOX", command = export_cybox)
 export_cybox.pack({"side": "left"})
 
-export_openioc = Button(topframe, text = "Export OpenIOC", command = export_openioc)
-export_openioc.pack({"side" : "left"})
+if ioc_writer_available:
+    export_openioc = Button(topframe, text = "Export OpenIOC 1.1", command = export_openioc)
+    export_openioc.pack({"side" : "left"})
 
 #build main text area
 text = Text(bottomframe, width=120, height=50)
