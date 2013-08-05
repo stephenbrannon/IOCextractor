@@ -6,11 +6,19 @@
 #Usage: "python IOCextractor.py" or "python IOCextractor.py document.txt"
 #2012 Stephen Brannon, Verizon RISK Team
 
-from Tkinter import *
-from tkFileDialog import askopenfilename, asksaveasfilename
 import re
 import sys
+
+from Tkinter import *
+from tkFileDialog import askopenfilename, asksaveasfilename, askdirectory
+
 import cybox.api as cybox_api
+try:
+    from ioc_writer import ioc_api, ioc_common
+    ioc_writer_available = True
+except ImportError, e:
+    print 'ERROR: Could not load ioc_writer.  Will not be able to export IOCs in OpenIOC 1.1 format.'
+    ioc_writer_available = False
 
 tags = ['md5', 'ipv4', 'url', 'domain', 'email']
 
@@ -281,10 +289,84 @@ def export_cybox():
             f.close()
         # end if
             
-             
+def export_openioc():
+    '''
+    Export the tagged items in OpenIOC 1.1 format.
+    This prompts the user to determine which directory they want the IOC saved
+    out too.
+    
+    Email tags default to 'Email/From' address, implying that the email address
+    found is the source address of an email.  This may not be accurate in all
+    cases.
+    '''
+    def make_network_uri(uri, condition='contains', negate=False, preserve_case = False):
+        document = 'Network'
+        search = 'Network/URI'
+        content_type = 'string'
+        content = uri
+        IndicatorItem_node = ioc_api.make_IndicatorItem_node(condition, document, search, content_type, content, negate=negate, preserve_case=preserve_case, context_type = None)
+        return IndicatorItem_node
+    
+    def make_email_from(from_address, condition='contains', negate=False, preserve_case = False):
+        document = 'Email'
+        search = 'Email/From'
+        content_type = 'string'
+        content = from_address
+        IndicatorItem_node = ioc_api.make_IndicatorItem_node(condition, document, search, content_type, content, negate=negate, preserve_case=preserve_case, context_type = None)
+        return IndicatorItem_node
+
+    output_directory = askdirectory(title = "Save IOC To")
         
-
-
+    if output_directory:
+        indicator_nodes = []
+        for tag in tags:
+            temp_indicators = []
+            myhighlights = text.tag_ranges(tag)
+            mystart = 0
+            for h in myhighlights:
+                if mystart == 0:
+                    mystart = h
+                else:
+                    mystop = h
+                    # Deobfuscate ip addresses, domain names and email addresses
+                    value = text.get(mystart,mystop).replace('[.]','.').replace('[@]','@')
+                    if tag == 'md5':
+                        value = value.upper()
+                        if value not in temp_indicators:
+                            indicator_node = ioc_common.make_fileitem_md5sum(value)
+                            indicator_nodes.append(indicator_node)
+                            temp_indicators.append(value)
+                    elif tag == 'ipv4':
+                        if value not in temp_indicators:
+                            indicator_node = ioc_common.make_portitem_remoteip(value)
+                            indicator_nodes.append(indicator_node)
+                            temp_indicators.append(value)
+                    elif tag == 'domain':
+                        if value not in temp_indicators:
+                            indicator_node = ioc_common.make_dnsentryitem_recordname(value)
+                            indicator_nodes.append(indicator_node)
+                            temp_indicators.append(value)
+                    elif tag == 'url':
+                        if value not in temp_indicators:
+                            indicator_node = make_network_uri(value)
+                            indicator_nodes.append(indicator_node)
+                            temp_indicators.append(value)
+                    elif tag == 'email':
+                        if value not in temp_indicators:
+                            indicator_node = make_email_from(value)
+                            indicator_nodes.append(indicator_node)
+                            temp_indicators.append(value)
+                    else:
+                        print 'Unknown tag encountered [%s]' % str(tag)
+                    mystart = 0
+    
+    if len(indicator_nodes) > 0:
+        ioc_obj = ioc_api.IOC(name = "IOC Extractor", description = "IOC generated with IOCExtractor")
+        for indicator in indicator_nodes:
+            ioc_obj.top_level_indicator.append(indicator)
+        ioc_obj.write_ioc_to_file(output_directory)
+    return True
+        
 root = Tk()
 root.title('IOCextractor')
 
@@ -320,9 +402,12 @@ export_console.pack({"side": "left"})
 export_csv = Button(topframe, text = "Export CSV", command = export_csv)
 export_csv.pack({"side": "left"})
 
-export_cybox= Button(topframe, text = "Export CybOX", command = export_cybox)
+export_cybox = Button(topframe, text = "Export CybOX", command = export_cybox)
 export_cybox.pack({"side": "left"})
 
+if ioc_writer_available:
+    export_openioc = Button(topframe, text = "Export OpenIOC 1.1", command = export_openioc)
+    export_openioc.pack({"side" : "left"})
 
 #build main text area
 text = Text(bottomframe, width=120, height=50)
