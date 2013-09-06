@@ -12,7 +12,15 @@ import sys
 from Tkinter import *
 from tkFileDialog import askopenfilename, asksaveasfilename, askdirectory
 
-import cybox.api as cybox_api
+try:
+    from cybox import helper as cybox_helper
+    from cybox.core import Observables
+    import cybox.utils
+    python_cybox_available = True
+except:
+    print "ERROR: Could not load python-cybox. Will not be able to export IOCs in CybOX 2.0 format."
+    python_cybox_available = False
+    
 try:
     from ioc_writer import ioc_api, ioc_common
     ioc_writer_available = True
@@ -220,10 +228,15 @@ def export_csv():
         if len(filename) - filename.find('.csv') != 4:
             filename += '.csv' #add .csv extension if missing
         with open(filename, 'w') as f:
-             f.write(output)
+            f.write(output)
 
 
 def export_cybox():
+    """
+    Export the tagged items in CybOX 2.0 format.
+    This prompts the user to determine which directory they want the CybOX saved
+    out too.
+    """
     filename = asksaveasfilename(title="Save As", filetypes=[("xml file",".xml"),("All files",".*")])
     observables_doc = None
      
@@ -243,31 +256,31 @@ def export_cybox():
                     if t == 'md5':
                         value = value.upper()
                         if value not in indicators:
-                            observable = cybox_api.create_file_hash_observable('', value, 'MD5')
+                            observable = cybox_helper.create_file_hash_observable('', value)
                             observables.append(observable)
                             indicators.append(value)
                         
                     elif t == 'ipv4':
                         if not value in indicators:
-                            observable = cybox_api.create_ipv4_observable(value)
+                            observable = cybox_helper.create_ipv4_observable(value)
                             observables.append(observable)
                             indicators.append(value)
 
                     elif t == 'domain':
                         if not value in indicators:
-                            observable = cybox_api.create_domain_name_observable(value)
+                            observable = cybox_helper.create_domain_name_observable(value)
                             observables.append(observable)
                             indicators.append(value)
                     
                     elif t == 'url':
                         if not value in indicators:
-                            observable = cybox_api.create_url_observable(value)
+                            observable = cybox_helper.create_url_observable(value)
                             observables.append(observable)
                             indicators.append(value)
 
                     elif t == 'email':
                         if not value in indicators:
-                            observable = cybox_api.create_email_address_observable(value)
+                            observable = cybox_helper.create_email_address_observable(value)
                             observables.append(observable)
                             indicators.append(value)
 
@@ -278,15 +291,18 @@ def export_cybox():
         # end for
        
         if len(observables) > 0:
-            observables_doc = cybox_api.create_observables_document(observables)
+            NS = cybox.utils.Namespace("http://example.com/", "example")
+            cybox.utils.set_id_namespace(NS)
+            observables_doc = Observables(observables=observables)
  
             if len(filename) - filename.find('.xml') != 4:
                 filename = "%s.xml" % filename #add .xml extension if missing
             # end if
             
-            f = open(filename, "wb")
-            observables_doc.export(f, 0)
-            f.close()
+            with open(filename, "wb") as f:
+                cybox_xml = observables_doc.to_xml(namespace_dict={NS.name: NS.prefix})
+                f.write(cybox_xml)
+            
         # end if
             
 def export_openioc():
@@ -402,8 +418,9 @@ export_console.pack({"side": "left"})
 export_csv = Button(topframe, text = "Export CSV", command = export_csv)
 export_csv.pack({"side": "left"})
 
-export_cybox = Button(topframe, text = "Export CybOX", command = export_cybox)
-export_cybox.pack({"side": "left"})
+if python_cybox_available:
+    export_cybox = Button(topframe, text = "Export CybOX", command = export_cybox)
+    export_cybox.pack({"side": "left"})
 
 if ioc_writer_available:
     export_openioc = Button(topframe, text = "Export OpenIOC 1.1", command = export_openioc)
