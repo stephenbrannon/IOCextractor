@@ -1,0 +1,7 @@
+*.swp
+*.py[co]
+*.egg-info
+.project
+.pydevproject
+.settings
+
