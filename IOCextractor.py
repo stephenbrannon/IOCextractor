@@ -13,12 +13,19 @@ from Tkinter import *
 from tkFileDialog import askopenfilename, asksaveasfilename, askdirectory
 
 try:
+    import cybox
     from cybox import helper as cybox_helper
-    from cybox.core import Observables
+    from cybox.core import Observables, Observable
+    from cybox.objects.uri_object import URI
     import cybox.utils
-    python_cybox_available = True
-except:
-    print "ERROR: Could not load python-cybox. Will not be able to export IOCs in CybOX 2.0 format."
+    
+    if hasattr(cybox, "__version__") and cybox.__version__.startswith("2"):
+        python_cybox_available = True
+    else:
+        raise ImportError("python-cybox must be v2.0.0 or greater")
+    
+except Exception as e:
+    print "ERROR: Could not load python-cybox. Will not be able to export IOCs in CybOX 2.0 format.\nException:[%s]" % (str(e))
     python_cybox_available = False
     
 try:
@@ -233,8 +240,8 @@ def export_csv():
 
 def export_cybox():
     """
-    Export the tagged items in CybOX 2.0 format.
-    This prompts the user to determine which directory they want the CybOX saved
+    Export the tagged items in CybOX format.
+    This prompts the user to determine which file they want the CybOX saved
     out too.
     """
     filename = asksaveasfilename(title="Save As", filetypes=[("xml file",".xml"),("All files",".*")])
@@ -268,8 +275,12 @@ def export_cybox():
 
                     elif t == 'domain':
                         if not value in indicators:
-                            observable = cybox_helper.create_domain_name_observable(value)
-                            observables.append(observable)
+                            # CybOX 2.0 contains a schema bug that prevents the use of this function.
+                            # The workaround is to not declare a @type attribute for the URI object 
+                            #observable = cybox_helper.create_domain_name_observable(value)
+                            uri_obj = URI(value=value)
+                            uri_obs = Observable(item=uri_obj)
+                            observables.append(uri_obs)  
                             indicators.append(value)
                     
                     elif t == 'url':
@@ -284,7 +295,6 @@ def export_cybox():
                             observables.append(observable)
                             indicators.append(value)
 
-
                     mystart = 0
                 # end if
             # end for
@@ -295,7 +305,7 @@ def export_cybox():
             cybox.utils.set_id_namespace(NS)
             observables_doc = Observables(observables=observables)
  
-            if len(filename) - filename.find('.xml') != 4:
+            if not filename.endswith('.xml'):
                 filename = "%s.xml" % filename #add .xml extension if missing
             # end if
             
