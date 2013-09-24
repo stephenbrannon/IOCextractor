@@ -11,6 +11,7 @@ import sys
 
 from Tkinter import *
 from tkFileDialog import askopenfilename, asksaveasfilename, askdirectory
+from distutils.version import LooseVersion
 
 try:
     import cybox
@@ -20,20 +21,10 @@ try:
     import cybox.utils
     
     if hasattr(cybox, "__version__"):
-        version = cybox.__version__
-        pattern = r"(\d)\.(\d)\.(\d+)([a-z]\d+)?\.?(\d+)?"
-        m = re.search(pattern, version)
-        
-        major   = int(m.group(1)) if m.group(1) else 0
-        minor   = int(m.group(2)) if m.group(2) else 0
-        update  = int(m.group(3)) if m.group(3) else 0
-        build   = int(m.group(5)) if m.group(5) else 0    
-        
-        minver = (2,0,1,0) # minimum python-cybox version is v2.0.1.0
-        if ((major, minor, update, build) >= minver):
+        if (LooseVersion(cybox.__version__) >= LooseVersion('2.0.1.0')):
             python_cybox_available = True
         else:
-            raise ImportError("python-cybox must be v2.0.1.0 or greater. Found v%s" % version)
+            raise ImportError("python-cybox must be v2.0.1.0 or greater. Found v%s" % cybox.__version__)
     else:
         raise ImportError("python-cybox must be v2.0.1.0 or greater")
     
