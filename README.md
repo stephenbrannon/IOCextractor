@@ -9,7 +9,7 @@ Compatibility and Requirements
 * Compatible and tested operating systems: Windows 7, Mac OS 10.8.4, Ubuntu 13.04
 * IOCextractor requires TkInter (http://wiki.python.org/moin/TkInter). 
 * OpenIOC exporting requires the ioc_writer library (https://github.com/mandiant/ioc_writer).
-* CybOX exporting requires python-cybox 2.0.x (https://pypi.python.org/pypi/cybox/)
+* CybOX exporting requires python-cybox >= 2.0.1.0 (https://pypi.python.org/pypi/cybox/)
 
 The program is written in Python 2.7, and a binary version for Windows is provided (IOCextractor.zip). 
 
