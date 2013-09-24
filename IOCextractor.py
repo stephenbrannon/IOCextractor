@@ -11,6 +11,7 @@ import sys
 
 from Tkinter import *
 from tkFileDialog import askopenfilename, asksaveasfilename, askdirectory
+from distutils.version import LooseVersion
 
 try:
     import cybox
@@ -19,10 +20,13 @@ try:
     from cybox.objects.uri_object import URI
     import cybox.utils
     
-    if hasattr(cybox, "__version__") and cybox.__version__.startswith("2"):
-        python_cybox_available = True
+    if hasattr(cybox, "__version__"):
+        if (LooseVersion(cybox.__version__) >= LooseVersion('2.0.1.0')):
+            python_cybox_available = True
+        else:
+            raise ImportError("python-cybox must be v2.0.1.0 or greater. Found v%s" % cybox.__version__)
     else:
-        raise ImportError("python-cybox must be v2.0.0 or greater")
+        raise ImportError("python-cybox must be v2.0.1.0 or greater")
     
 except Exception as e:
     print "ERROR: Could not load python-cybox. Will not be able to export IOCs in CybOX 2.0 format.\nException:[%s]" % (str(e))
@@ -275,12 +279,8 @@ def export_cybox():
 
                     elif t == 'domain':
                         if not value in indicators:
-                            # CybOX 2.0 contains a schema bug that prevents the use of this function.
-                            # The workaround is to not declare a @type attribute for the URI object 
-                            #observable = cybox_helper.create_domain_name_observable(value)
-                            uri_obj = URI(value=value)
-                            uri_obs = Observable(item=uri_obj)
-                            observables.append(uri_obs)  
+                            observable = cybox_helper.create_domain_name_observable(value)
+                            observables.append(observable)
                             indicators.append(value)
                     
                     elif t == 'url':
@@ -310,7 +310,7 @@ def export_cybox():
             # end if
             
             with open(filename, "wb") as f:
-                cybox_xml = observables_doc.to_xml(namespace_dict={NS.name: NS.prefix})
+                cybox_xml = observables_doc.to_xml()
                 f.write(cybox_xml)
             
         # end if
