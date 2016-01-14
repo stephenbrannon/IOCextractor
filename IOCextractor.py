@@ -330,7 +330,7 @@ def export_openioc():
         search = 'Network/URI'
         content_type = 'string'
         content = uri
-        IndicatorItem_node = ioc_api.make_IndicatorItem_node(condition, document, search, content_type, content, negate=negate, preserve_case=preserve_case, context_type = None)
+        IndicatorItem_node = ioc_api.make_indicatoritem_node(condition, document, search, content_type, content, negate=negate, preserve_case=preserve_case, context_type = None)
         return IndicatorItem_node
     
     def make_email_from(from_address, condition='contains', negate=False, preserve_case = False):
@@ -338,7 +338,7 @@ def export_openioc():
         search = 'Email/From'
         content_type = 'string'
         content = from_address
-        IndicatorItem_node = ioc_api.make_IndicatorItem_node(condition, document, search, content_type, content, negate=negate, preserve_case=preserve_case, context_type = None)
+        IndicatorItem_node = ioc_api.make_indicatoritem_node(condition, document, search, content_type, content, negate=negate, preserve_case=preserve_case, context_type = None)
         return IndicatorItem_node
 
     output_directory = askdirectory(title = "Save IOC To")
